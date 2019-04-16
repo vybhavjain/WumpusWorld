@@ -3,7 +3,10 @@ package wumpus;
 import javax.swing.*;
 import java.awt.GridLayout;
 import java.awt.event.*;  
+import java.awt.*;
 
+import javax.swing.BorderFactory;
+import javax.swing.border.Border;
 
 public class Own {
 	int index = 12;
@@ -19,18 +22,23 @@ public class Own {
 	String Breeze = "b";
 	
 	int pitloc = 2;
-	int wumploc = 4;
+	int wumploc = 8;
 	int goldloc = 9;
+	
+    JButton buttons[] = new JButton[30];
+
     public Own(){ 
     	
-        JButton buttons[] = new JButton[30];
         JFrame frame=new JFrame();
     	JPanel frame2 = new JPanel();
     	
     	frame2.setLayout(new GridLayout(4, 4));
         
+    	Border bored = BorderFactory.createLineBorder(Color.RED);
         for (int i = 0; i < 16; i++) {
-            buttons[i] = new JButton("?");
+            buttons[i] = new JButton();
+            //frame2.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            buttons[i].setBorder(bored);
             frame2.add(buttons[i]);
             //buttons[i].setEnabled(false);
         }
@@ -49,6 +57,8 @@ public class Own {
         frame2.setVisible(true);
         frame2.setBounds(250,180,280,280);    
         frame.add(frame2);
+        //frame2.setVisible(true);
+
         
         JButton forward = new JButton("Forward");
         forward.setBounds(30,10,90,60);
@@ -108,9 +118,28 @@ public class Own {
             			}
             			index+=4; 
             		}
+            		if((buttons[index].getText()).contains("P") ||(buttons[index].getText()).contains("W")  )
+            		{
+                		tf.setText("game over, you have died!!!");
+                        forward.setEnabled(false);
+                        left.setEnabled(false);
+                        right.setEnabled(false);
+                        shoot.setEnabled(false);
+            		}
+            		else if((buttons[index].getText()).contains("G"))
+            		{
+                		tf.setText("CONGRATULATIONS , YOU HAVE WON!! Score is :" + String.valueOf(score));
+                        forward.setEnabled(false);
+                        left.setEnabled(false);
+                        right.setEnabled(false);
+                        shoot.setEnabled(false);
+            		}
+            		else
+            		{
             		buttons[num].setText(s2);
             		buttons[index].setText(s1); 
             		tf.setText(String.valueOf(score));
+            		}
             }  
             }); 
 
@@ -165,26 +194,23 @@ public class Own {
         shoot.addActionListener(new ActionListener(){  
             public void actionPerformed(ActionEvent e){  
             		String s1 = buttons[index].getText();
-            		//String s2 = "-";
-            		score-=10;
-            		if(s1 == "^")
+            		int arrow = index;
+            		if(arrow < 11 && s1.contains("^"))
             		{
-            			s1 = ">";
+            			
             		}
-            		else if(s1 == ">")
+                   	if(arrow % 4 !=  3)
             		{
-            			s1 = "v";
+                   		
             		}
-            		else if(s1 == "<")
+                   	if(arrow % 4 !=  0)
             		{
-            			s1 = "^";
+                   	
             		}
-            		else if(s1 == "v")
+                   	if(arrow > 3)
             		{
-            			s1 = "<";
+                   	
             		}
-                    buttons[index].setText(s1);   
-            		tf.setText(String.valueOf(score));
             }  
             }); 
         
@@ -205,8 +231,33 @@ public class Own {
     
     void setpos(int i,String s)
     {
-    	
-    }
+    	String s1,s2;
+       	
+       	if(i < 11)
+		{
+       		s2 = buttons[i+4].getText();
+           	s1 = s2 +  s;
+			buttons[i+4].setText(s1);
+		}
+       	if(i % 4 !=  3)
+		{
+       		s2 = buttons[i+1].getText();
+           	s1 = s2 +  s;
+			buttons[i+1].setText(s1);
+		}
+       	if(i % 4 !=  0)
+		{
+       		s2 = buttons[i-1].getText();
+           	s1 = s2 +  s;
+			buttons[i-1].setText(s1);
+		}
+       	if(i > 3)
+		{
+       		s2 = buttons[i-4].getText();
+           	s1 = s2 +  s;
+			buttons[i-4].setText(s1);
+		}
+		}
     
 public static void main(String[] args) {
         Own t1 = new Own();//makes new ButtonGrid with 2 parameters
