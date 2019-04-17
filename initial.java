@@ -22,7 +22,7 @@ public class Own {
 	String Breeze = "b";
 	
 	int pitloc = 2;
-	int wumploc = 8;
+	int wumploc = 3;
 	int goldloc = 9;
 	
     JButton buttons[] = new JButton[30];
@@ -36,7 +36,7 @@ public class Own {
         
     	Border bored = BorderFactory.createLineBorder(Color.RED);
         for (int i = 0; i < 16; i++) {
-            buttons[i] = new JButton();
+            buttons[i] = new JButton(" ");
             //frame2.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
             buttons[i].setBorder(bored);
             frame2.add(buttons[i]);
@@ -75,14 +75,17 @@ public class Own {
         JTextField tf = new JTextField("Current score will be displayed here");
         tf.setBounds(30,290,180,60);
         
+        JTextField tf1 = new JTextField("On click shoot will be displayed here");
+        tf.setBounds(30,360,180,60);
+        
         
         forward.addActionListener(new ActionListener(){  
             public void actionPerformed(ActionEvent e){  
             		String s1 = buttons[index].getText();
-            		String s2 = "-";
-            		num = index;
+            		String s3 = "";
+             		num = index;
             		score-=1;
-            		if(s1 == "^")
+            		if(s1.contains("^"))
             		{
             			if(index<=3)
             			{
@@ -90,26 +93,29 @@ public class Own {
             				score+=1;
             			}
             			index-=4;
+            			s3 = "^";
             		}
-            		if(s1 == ">")
+            		if(s1.contains(">"))
             		{
             			if(index%4 == 3)
             			{
             				index-=1;
             				score+=1;
             			}
-            			index+=1;    
+            			index+=1; 
+                			s3 = ">";
             		}
-            		if(s1 == "<")
+            		if(s1.contains("<"))
             		{
             			if(index%4 == 0)
             			{
             				index+=1;
             				score+=1;
             			}
-            			index-=1;            	
+            			index-=1;       
+            			s3 = "<";
             		}
-            		if(s1 == "v")
+            		if(s1.contains("v"))
             		{
             			if(index >11)
             			{
@@ -117,6 +123,7 @@ public class Own {
             				score+=1;
             			}
             			index+=4; 
+            			s3 = "v";
             		}
             		if((buttons[index].getText()).contains("P") ||(buttons[index].getText()).contains("W")  )
             		{
@@ -136,8 +143,12 @@ public class Own {
             		}
             		else
             		{
-            		buttons[num].setText(s2);
-            		buttons[index].setText(s1); 
+            		buttons[num].setText(s1.replaceAll("[v,>,^,<]",""));
+            		String s8 = buttons[index].getText();
+            		if(s8.contains(s3))
+            			buttons[index].setText(s8);
+            		else
+            			buttons[index].setText(s3+s8);
             		tf.setText(String.valueOf(score));
             		}
             }  
@@ -146,72 +157,110 @@ public class Own {
         left.addActionListener(new ActionListener(){  
             public void actionPerformed(ActionEvent e){  
             		String s1 = buttons[index].getText();
-            		String s2 = "-";
-            		if(s1 == "^")
+            		String replaceString = "";
+            		//String s2 = "-";
+            		if(s1.contains("^"))
             		{
-            			s1 = "<";
+            			 replaceString=s1.replace("^","<");
             		}
-            		else if(s1 == ">")
+            		else if(s1.contains(">"))
             		{
-            			s1 = "^";
+            			 replaceString=s1.replace(">","^");
             		}
-            		else if(s1 == "<")
+            		else if(s1.contains("<"))
             		{
-            			s1 = "v";
+            			 replaceString=s1.replace("<","v");
             		}
-            		else if(s1 == "v")
+            		else if(s1.contains("v"))
             		{
-            			s1 = ">";
+            			 replaceString=s1.replace("v",">");
             		}
-                    buttons[index].setText(s1);       
+                    buttons[index].setText(replaceString);       
             }  
             }); 
         
         right.addActionListener(new ActionListener(){  
             public void actionPerformed(ActionEvent e){  
-            		String s1 = buttons[index].getText();
-            		String s2 = "-";
-            		if(s1 == "^")
-            		{
-            			s1 = ">";
-            		}
-            		else if(s1 == ">")
-            		{
-            			s1 = "v";
-            		}
-            		else if(s1 == "<")
-            		{
-            			s1 = "^";
-            		}
-            		else if(s1 == "v")
-            		{
-            			s1 = "<";
-            		}
-                    buttons[index].setText(s1);       
+            	String s1 = buttons[index].getText();
+        		String replaceString = "";
+        		//String s2 = "-";
+        		if(s1.contains("^"))
+        		{
+        			 replaceString=s1.replace("^",">");
+        		}
+        		else if(s1.contains(">"))
+        		{
+        			 replaceString=s1.replace(">","v");
+        		}
+        		else if(s1.contains("<"))
+        		{
+        			 replaceString=s1.replace("<","^");
+        		}
+        		else if(s1.contains("v"))
+        		{
+        			 replaceString=s1.replace("v","<");
+        		}
+                buttons[index].setText(replaceString);        
             }  
             }); 
-        
         shoot.addActionListener(new ActionListener(){  
             public void actionPerformed(ActionEvent e){  
             		String s1 = buttons[index].getText();
-            		int arrow = index;
-            		if(arrow < 11 && s1.contains("^"))
+            		String s2 = "";
+            		String s3 = "";
+            		int num;
+            		if(index > 3 && s1.contains("^"))
             		{
-            			
+            			num = index-4; 
+            			s2 = buttons[num].getText();
+            			if(s2.contains("W"))
+            			{
+            				s3 = s2.replaceAll("W","");
+            				tf1.setText("Congrats,Wumpus shot!!!");
+            				buttons[num].setText(s3);
+            			}
+            			else
+            				tf1.setText("No Wumpus present");
             		}
-                   	if(arrow % 4 !=  3)
+            		if(index % 4 != 0 && s1.contains("<"))
             		{
-                   		
+            			num = index-1; 
+            			s2 = buttons[num].getText();
+            			if(s2.contains("W"))
+            			{
+            				s3 = s2.replaceAll("W","");
+            				tf1.setText("Congrats,Wumpus shot!!!");
+            				buttons[num].setText(s3);
+            			}
+            			else
+            				tf1.setText("No Wumpus present");
             		}
-                   	if(arrow % 4 !=  0)
+            		if(index % 4 !=3  && s1.contains(">"))
             		{
-                   	
+            			num = index+1; 
+            			s2 = buttons[num].getText();
+            			if(s2.contains("W"))
+            			{
+            				s3 = s2.replaceAll("W","");
+            				tf1.setText("Congrats,Wumpus shot!!!");
+            				buttons[num].setText(s3);
+            			}
+            			else
+            				tf1.setText("No Wumpus present");
             		}
-                   	if(arrow > 3)
+            		if(index <12  && s1.contains("v"))
             		{
-                   	
-            		}
-            }  
+            			num = index+4; 
+            			s2 = buttons[num].getText();
+            			if(s2.contains("W"))
+            			{
+            				s3 = s2.replaceAll("W","");
+            				tf1.setText("Congrats,Wumpus shot!!!");
+            				buttons[num].setText(s3);
+            			}
+            			else
+            				tf1.setText("No Wumpus present");
+            		}}  
             }); 
         
         frame.add(forward);
@@ -219,8 +268,10 @@ public class Own {
         frame.add(right);
         frame.add(shoot);
         frame.add(tf);
+        frame.add(tf1);
+
         
-        JPanel grid = new JPanel();
+        //JPanel grid = new JPanel();
         
         
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
