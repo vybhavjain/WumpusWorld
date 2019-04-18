@@ -1,5 +1,7 @@
 package wumpus;
+import java.util.Random;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.GridLayout;
 import java.awt.event.*;  
@@ -9,7 +11,7 @@ import javax.swing.BorderFactory;
 import javax.swing.border.Border;
 
 public class Own {
-	int index = 12;
+	int index =12;
 	int num;
 	int score = 1000;
 	String Wumpus = "W";
@@ -20,12 +22,9 @@ public class Own {
 	
 	String Pit = "P";
 	String Breeze = "b";
-	
-	int pitloc = 2;
-	int wumploc = 3;
-	int goldloc = 9;
-	
-    JButton buttons[] = new JButton[30];
+	Random rand = new Random();
+
+   JButton buttons[] = new JButton[30];
 
     public Own(){ 
     	
@@ -33,36 +32,60 @@ public class Own {
     	JPanel frame2 = new JPanel();
     	
     	frame2.setLayout(new GridLayout(4, 4));
-        
+        Border emptyBorder = BorderFactory.createEmptyBorder(20, 20, 0, 0);
+
     	Border bored = BorderFactory.createLineBorder(Color.RED);
         for (int i = 0; i < 16; i++) {
             buttons[i] = new JButton(" ");
-            //frame2.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            buttons[i].setBorder(emptyBorder);
             buttons[i].setBorder(bored);
             frame2.add(buttons[i]);
             //buttons[i].setEnabled(false);
         }
-        
+    	//index = rand.nextInt(16);
+    	int pitloc = rand.nextInt(16);
+    	int wumploc = rand.nextInt(16);
+    	int goldloc = rand.nextInt(16);
+    	
+    	while(goldloc == wumploc || goldloc == pitloc)
+    	{
+    		goldloc = rand.nextInt(16);
+    	}
+    	while(goldloc == index || index == pitloc || wumploc == index)
+    	{
+    		index = rand.nextInt(16);
+    	}
+    	    	
         buttons[pitloc].setText(Pit);
         buttons[wumploc].setText(Wumpus);
         buttons[goldloc].setText(Gold);
 
+        Icon pit = new ImageIcon("pit.jpg");
+        Icon breeze = new ImageIcon("breeze.jpg");
+      
+        Icon wumpus = new ImageIcon("wumpus.png");
+        Icon smell = new ImageIcon("smell.jpg");
         
-        setpos(pitloc,Breeze);
-        setpos(wumploc,Smell);
-        setpos(goldloc,Glitter);
+        Icon gold = new ImageIcon("gold.png");
+        Icon glitter = new ImageIcon("glitter.jpg");
         
+        
+        setpos(pitloc,Breeze,pit,breeze);
+        setpos(wumploc,Smell,wumpus,smell);
+        setpos(goldloc,Glitter,gold,glitter);
+        
+          
         
         buttons[index].setText("^");
         frame2.setVisible(true);
-        frame2.setBounds(250,180,280,280);    
+        frame2.setBounds(450,20,720,720);    
         frame.add(frame2);
-        //frame2.setVisible(true);
 
         
         JButton forward = new JButton("Forward");
         forward.setBounds(30,10,90,60);
      
+        
         JButton left = new JButton("Left");
         left.setBounds(30,80,90,60);
         
@@ -73,11 +96,19 @@ public class Own {
         shoot.setBounds(30,220,90,60);
         
         JTextField tf = new JTextField("Current score will be displayed here");
-        tf.setBounds(30,290,180,60);
+        tf.setBounds(30,290,400,60);
         
         JTextField tf1 = new JTextField("On click shoot will be displayed here");
-        tf.setBounds(30,360,180,60);
+        tf1.setBounds(30,360,400,60);
         
+        JTextArea tf2 = new JTextArea("WELCOME TO WUMPUS WORLD: \n INSTRUCTIONS: \n 0) Start position is denoted by : '^' \n 1)Objective of the game is to retrive the gold. \n 2)Each step forward costs 1 point, and every arrow shot costs 10points. \n 3)Wumpus can killed by clicking on shoot while facing towards it. \n 4) you start off with 1000 points \n 5)Avoid pitfalls and wumpus(They will kill you). \n 6)b represents breeze(Pit nearby). \n 7)s represents smell(Wumpus nearby) .\n 8)g represents glitter(Gold nearby). \n 9)Good Luck adventurer!!");
+        tf2.setBounds(30,430,400,200);
+        frame.add(tf2);
+        
+        JButton actions= new JButton("Actions");
+        actions.setBounds(180,20,250,250);
+        frame.add(actions);
+        actions.setEnabled(false);
         
         forward.addActionListener(new ActionListener(){  
             public void actionPerformed(ActionEvent e){  
@@ -132,6 +163,12 @@ public class Own {
                         left.setEnabled(false);
                         right.setEnabled(false);
                         shoot.setEnabled(false);
+                		String s8 = buttons[index].getText();
+                		buttons[num].setText(s1.replaceAll("[v,>,^,<]",""));
+                        if(s8.contains(s3))
+                			buttons[index].setText(s8);
+                		else
+                			buttons[index].setText(s3+s8);
             		}
             		else if((buttons[index].getText()).contains("G"))
             		{
@@ -140,6 +177,12 @@ public class Own {
                         left.setEnabled(false);
                         right.setEnabled(false);
                         shoot.setEnabled(false);
+                		String s8 = buttons[index].getText();
+                		buttons[num].setText(s1.replaceAll("[v,>,^,<]",""));
+                        if(s8.contains(s3))
+                			buttons[index].setText(s8);
+                		else
+                			buttons[index].setText(s3+s8);
             		}
             		else
             		{
@@ -183,7 +226,6 @@ public class Own {
             public void actionPerformed(ActionEvent e){  
             	String s1 = buttons[index].getText();
         		String replaceString = "";
-        		//String s2 = "-";
         		if(s1.contains("^"))
         		{
         			 replaceString=s1.replace("^",">");
@@ -209,6 +251,7 @@ public class Own {
             		String s2 = "";
             		String s3 = "";
             		int num;
+            		score-=10;
             		if(index > 3 && s1.contains("^"))
             		{
             			num = index-4; 
@@ -270,44 +313,45 @@ public class Own {
         frame.add(tf);
         frame.add(tf1);
 
-        
-        //JPanel grid = new JPanel();
-        
-        
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
-        frame.setSize(800,800);
+        frame.setSize(1300,900);
         frame.setLayout(null);  
         frame.setVisible(true);
 }
     
-    void setpos(int i,String s)
+    void setpos(int i,String s,Icon x,Icon y) //x is main , y is effect
     {
     	String s1,s2;
        	
-       	if(i < 11)
+       	if(i < 12)
 		{
        		s2 = buttons[i+4].getText();
            	s1 = s2 +  s;
 			buttons[i+4].setText(s1);
+			buttons[i+4].setIcon(y);
 		}
        	if(i % 4 !=  3)
 		{
        		s2 = buttons[i+1].getText();
            	s1 = s2 +  s;
 			buttons[i+1].setText(s1);
+			buttons[i+1].setIcon(y);
 		}
        	if(i % 4 !=  0)
 		{
        		s2 = buttons[i-1].getText();
            	s1 = s2 +  s;
 			buttons[i-1].setText(s1);
+			buttons[i-1].setIcon(y);
 		}
        	if(i > 3)
 		{
        		s2 = buttons[i-4].getText();
            	s1 = s2 +  s;
+			buttons[i-4].setIcon(y);
 			buttons[i-4].setText(s1);
 		}
+		buttons[i].setIcon(x);
 		}
     
 public static void main(String[] args) {
