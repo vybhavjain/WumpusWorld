@@ -1,12 +1,10 @@
 package wumpus;
 import java.util.Random;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.GridLayout;
 import java.awt.event.*;  
 import java.awt.*;
-
+import javax.swing.Icon.*;
 import javax.swing.BorderFactory;
 import javax.swing.border.Border;
 
@@ -69,12 +67,10 @@ public class Own {
         Icon gold = new ImageIcon("gold.png");
         Icon glitter = new ImageIcon("glitter.jpg");
         
-        
         setpos(pitloc,Breeze,pit,breeze);
         setpos(wumploc,Smell,wumpus,smell);
         setpos(goldloc,Glitter,gold,glitter);
         
-          
         
         buttons[index].setText("^");
         frame2.setVisible(true);
@@ -101,7 +97,7 @@ public class Own {
         JTextField tf1 = new JTextField("On click shoot will be displayed here");
         tf1.setBounds(30,360,400,60);
         
-        JTextArea tf2 = new JTextArea("WELCOME TO WUMPUS WORLD: \n INSTRUCTIONS: \n 0) Start position is denoted by : '^' \n 1)Objective of the game is to retrive the gold. \n 2)Each step forward costs 1 point, and every arrow shot costs 10points. \n 3)Wumpus can killed by clicking on shoot while facing towards it. \n 4) you start off with 1000 points \n 5)Avoid pitfalls and wumpus(They will kill you). \n 6)b represents breeze(Pit nearby). \n 7)s represents smell(Wumpus nearby) .\n 8)g represents glitter(Gold nearby). \n 9)Good Luck adventurer!!");
+        JTextArea tf2 = new JTextArea("WELCOME TO WUMPUS WORLD: \n INSTRUCTIONS: \n 0) Start position is denoted by : '^' \n 1)Objective of the game is to retrive the gold. \n 2)Each step forward costs 1 point, and every arrow shot costs 10points. \n 3)Wumpus can be killed by clicking on shoot while facing towards it. \n 4) you start off with 1000 points \n 5)Avoid pitfalls and wumpus(They will kill you). \n 6)b represents breeze(Pit nearby). \n 7)s represents smell(Wumpus nearby) .\n 8)g represents glitter(Gold nearby). \n 9)Good Luck adventurer!!");
         tf2.setBounds(30,430,400,200);
         frame.add(tf2);
         
@@ -158,7 +154,7 @@ public class Own {
             		}
             		if((buttons[index].getText()).contains("P") ||(buttons[index].getText()).contains("W")  )
             		{
-                		tf.setText("game over, you have died!!!");
+                		tf.setText("Game over, you have lost!!!");
                         forward.setEnabled(false);
                         left.setEnabled(false);
                         right.setEnabled(false);
